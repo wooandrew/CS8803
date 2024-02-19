@@ -1,6 +1,7 @@
 {
   "rewrites": [
     {"source": "/gameforge/", "destination": "https://gameforge.vercel.app/"},
-    {"source": "/criticalcartography/", "destination": "https://criticalcartography.vercel.app/"}
+    {"source": "/criticalcartography/", "destination": "https://criticalcartography.vercel.app/"},
+    {"source": "/criticalcartography/:match*", "destination": "https://criticalcartography.vercel.app/:match*"}
   ]
 }
