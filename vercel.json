@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    {"source": "/gameforge/", "destination": "https://cs8803.wooandrew.dev/gameforge"},
+    {"source": "/criticalcartography/", "destination": "https://cs8803.wooandrew.dev/criticalcartography"}
+  ]
+}
