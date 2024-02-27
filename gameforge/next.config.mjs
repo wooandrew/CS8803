@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: 'export',
+  // assetPrefix: 'https://gameforge.vercel.app/',
   basePath: '/gameforge',
 }
 

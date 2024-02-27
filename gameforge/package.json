@@ -1,6 +1,7 @@
 {
   "name": "gameforge",
   "version": "0.1.0",
+  "homepage": "https://wooandrew.dev/GameForge/",
   "private": true,
   "scripts": {
     "dev": "next dev",

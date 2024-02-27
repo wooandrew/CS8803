@@ -1,3 +1,6 @@
+// GameForge (c) 2024 Andrew Woo
+// License: MIT
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -15,10 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
+    <html lang="en" className="scroll-smooth">
       <body className={inter.className}>{children}</body>
     </html>
   );
