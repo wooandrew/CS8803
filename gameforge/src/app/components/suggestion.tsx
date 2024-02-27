@@ -19,7 +19,7 @@ const Suggestion: React.FC<SuggestionProps> = ({section}) => {
 
     setIsLoading(true);
 
-    const res = await fetch(`${process.env.BASEPATH}/api/suggestion`, {
+    const res = await fetch("/gameforge/api/suggestion", {
       method: "POST",
       body: JSON.stringify({ content: value }),
       headers: {
@@ -31,7 +31,7 @@ const Suggestion: React.FC<SuggestionProps> = ({section}) => {
       const result = await res.text();
       setApiResult(result); // Assuming your API response has a 'content' property
 
-      const imgRes = await fetch(`${process.env.BASEPATH}/api/generate_image`, {
+      const imgRes = await fetch("/gameforge/api/generate_image", {
         method: "POST",
         body: JSON.stringify({ key: value, element: result }),
         headers: {
