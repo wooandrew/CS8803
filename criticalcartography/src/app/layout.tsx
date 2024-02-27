@@ -1,6 +1,3 @@
-// GameForge (c) 2024 Andrew Woo
-// License: MIT
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -8,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GameForge",
-  description: "Assignment for CS 8803 CDP (Spring '24) @ GeorgiaTech | A Tool for Generating Concepts",
+  title: "U.S. State Park Density Choropleth",
+  description: "Assignment for CS 8803 CDP (Spring '24) @ GeorgiaTech | Creative & Critical Cartography",
 };
 
 export default function RootLayout({
@@ -18,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>

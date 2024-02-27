@@ -1,0 +1,230 @@
+
+path:hover {
+    cursor: pointer;
+    transform: scale(1.005, 1.005);
+    fill: #d5e6bb !important;
+}
+  
+#map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#us-map {
+    //position: absolute;
+    width: 100%; 
+    height: 100%;
+}
+
+path#AL {
+    fill: rgb(199, 199, 199);
+}
+
+path#AK {
+    fill: rgb(211, 211, 211);
+}
+
+path#AZ {
+    fill: rgb(195, 195, 195);
+}
+
+path#AR {
+    fill: rgb(177, 177, 177);
+}
+
+path#CA {
+    fill: rgb(16, 16, 16);
+}
+
+path#CO {
+    fill: rgb(190, 190, 190);
+}
+
+path#CT {
+    fill: rgb(158, 158, 158);
+}
+
+path#DE {
+    fill: rgb(227, 227, 227);
+}
+
+path#FL {
+    fill: rgb(62, 62, 62);
+}
+
+path#GA {
+    fill: rgb(159, 159, 159);
+}
+
+path#HI {
+    fill: rgb(238, 238, 238);
+}
+
+path#ID {
+    fill: rgb(199, 199, 199);
+}
+
+path#IL {
+    fill: rgb(137, 137, 137);
+}
+
+path#IN {
+    fill: rgb(186, 186, 186);
+}
+
+path#IA {
+    fill: rgb(164, 164, 164);
+}
+
+path#KS {
+    fill: rgb(172, 172, 172);
+}
+
+path#KY {
+    fill: rgb(192, 192, 192);
+}
+
+path#LA {
+    fill: rgb(206, 206, 206);
+}
+
+path#ME {
+    fill: rgb(211, 211, 211);
+}
+
+path#MD {
+    fill: rgb(191, 191, 191);
+}
+
+path#MA {
+    fill: rgb(128, 128, 128);
+}
+
+path#MI {
+    fill: rgb(150, 150, 150);
+}
+
+path#MN {
+    fill: rgb(173, 173, 173);
+}
+
+path#MS {
+    fill: rgb(203, 203, 203);
+}
+
+path#MO {
+    fill: rgb(172, 172, 172);
+}
+
+path#MT {
+    fill: rgb(174, 174, 174);
+}
+
+path#NE {
+    fill: rgb(221, 221, 221);
+}
+
+path#NV {
+    fill: rgb(207, 207, 207);
+}
+
+path#NH {
+    fill: rgb(226, 226, 226);
+}
+
+path#NJ {
+    fill: rgb(197, 197, 197);
+}
+
+path#NM {
+    fill: rgb(182, 182, 182);
+}
+
+path#NY {
+    fill: rgb(111, 111, 111);
+}
+
+path#NC {
+    fill: rgb(192, 192, 192);
+}
+
+path#ND {
+    fill: rgb(225, 225, 225);
+}
+
+path#OH {
+    fill: rgb(85, 85, 85);
+}
+
+path#OK {
+    fill: rgb(185, 185, 185);
+}
+
+path#OR {
+    fill: rgb(86, 86, 86);
+}
+
+path#PA {
+    fill: rgb(93, 93, 93);
+}
+
+path#RI {
+    fill: rgb(238, 238, 238);
+}
+
+path#SC {
+    fill: rgb(190, 190, 190);
+}
+
+path#SD {
+    fill: rgb(229, 229, 229);
+}
+
+path#TN {
+    fill: rgb(189, 189, 189);
+}
+
+path#TX {
+    fill: rgb(146, 146, 146);
+}
+
+path#UT {
+    fill: rgb(195, 195, 195);
+}
+
+path#VT {
+    fill: rgb(210, 210, 210);
+}
+
+path#VA {
+    fill: rgb(180, 180, 180);
+}
+
+path#WA {
+    fill: rgb(71, 71, 71);
+}
+
+path#WV {
+    fill: rgb(205, 205, 205);
+}
+
+path#WI {
+    fill: rgb(179, 179, 179);
+}
+
+path#WY {
+    fill: rgb(226, 226, 226);
+}
+
+
+path {
+    stroke: white;
+    transition: fill .4s ease;
+    transform-origin: center center;
+}
+
+.active {
+    fill: #98da95 !important;
+    cursor: pointer;
+}
