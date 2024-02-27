@@ -8,11 +8,11 @@ const nextConfig = {
           },
           {
             source: "/gameforge",
-            destination: `${GAMEFORGE_URL}/gameforge`,
+            destination: `${process.env.GAMEFORGE_URL}/gameforge`,
           },
           {
             source: "/gameforge/:path*",
-            destination: `${GAMEFORGE_URL}/gameforge/:path*`,
+            destination: `${process.env.GAMEFORGE_URL}/gameforge/:path*`,
           },
         ];
       },
