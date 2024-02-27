@@ -1,0 +1,49 @@
+/* Tri Traverlers Animation by Nate Wiley. Adapted for Next.js by Andrew Woo */
+/* https://codepen.io/natewiley/ */
+
+.wrap {
+  perspective: 800px;
+  transform-style: preserve-3d;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  background-image: radial-gradient(circle at center, #091737 0%, #001 40%, black 60%);
+  z-index: 0;
+}
+
+.tri {
+  height: 0;
+  width: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+}
+
+$total: 200;
+$time: 10s;
+
+@for $i from 1 through $total {
+	$size: random(50) * 1px;
+	$rotate: random(360) * 1deg;
+	.tri:nth-child(#{$i}){
+		border-top: $size solid hsla(random(360), 100%, 50%, 1);
+		border-right: $size solid transparent;
+		border-left: $size solid transparent;
+		margin-left: -$size/2;
+		margin-top: -$size/2;
+		-webkit-filter: grayscale(1);
+		filter: grayscale(1);
+		transform: rotate($rotate) translate3d(0,0,-1500px) scale(0);
+		animation: anim#{$i} $time infinite linear;
+		animation-delay: $i * -($time/$total);
+		opacity: 0;
+	}
+	
+	@keyframes anim#{$i}{
+		0% {
+			opacity: 1;
+			transform: rotate($rotate * 1.5) translate3d(random(1000) * 1px, random(1000) * 1px,1000px) scale(1);
+		}
+	}
+}

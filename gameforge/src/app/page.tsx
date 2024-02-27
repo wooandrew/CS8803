@@ -6,7 +6,7 @@ import TriTravelers from "./components/tritravelers";
 
 // import css
 import "./css/fonts.css";
-import "./css/tritravelers.css";
+import "./css/tritravelers.scss";
 
 export default function Home() {
   return (
