@@ -14,6 +14,14 @@ const nextConfig = {
             source: "/gameforge/:path*",
             destination: `${process.env.GAMEFORGE_URL}/gameforge/:path*`,
           },
+          {
+            source: "/criticalcartography",
+            destination: `${process.env.CRITICALCARTOGRAPHY_URL}/criticalcartography`,
+          },
+          {
+            source: "/criticalcartography/:path*",
+            destination: `${process.env.CRITICALCARTOGRAPHY_URL}/criticalcartography/:path*`,
+          },
         ];
       },
 };
