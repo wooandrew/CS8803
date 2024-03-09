@@ -9,7 +9,7 @@ export default function Home() {
 
 
       
-      <div className="flex w-screen h-screen relative flex-col bg-neutral-800">
+      <div className="flex w-screen h-screen relative flex-col bg-neutral-800 text-white">
 
         <div className="m-5 text-center">
           <h1 className='text-4xl font-bold'>U.S. State Park Density Choropleth</h1>
