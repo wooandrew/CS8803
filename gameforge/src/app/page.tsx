@@ -10,7 +10,7 @@ import "./css/tritravelers.scss";
 
 export default function Home() {
   return (
-    <main className="bg-black h-screen">
+    <main className="bg-black h-screen text-white">
       <div className="relative overflow-hidden h-full">
         <TriTravelers />
         <p className="relative bops-one text-4xl m-4">GameForge</p>
