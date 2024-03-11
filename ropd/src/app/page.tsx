@@ -14,10 +14,17 @@ export default function Home() {
   const canvasRefTop = useRef<HTMLCanvasElement>(null);
   const canvasRefBot = useRef<HTMLCanvasElement>(null);
   const canvasRefLine = useRef<HTMLCanvasElement>(null);
-  const intervalRef = useRef(null);
+  const intervalRef = useRef<NodeJS.Timeout>();
 
-  // Define your data here
-  const data = {
+  interface DataItem {
+    [index: number]: string;
+  }
+
+  interface Data {
+      [key: string]: DataItem[];
+  }
+
+  const data: Data = {
     "02_20.wav": [
       [
         "Dmin7",
@@ -3112,7 +3119,11 @@ export default function Home() {
     ]
   };
 
-  let chord_to_sleep_map = {
+  interface ChordSleepMap {
+    [key: string]: string;
+  }
+
+  let chord_to_sleep_map: ChordSleepMap = {
     'Gdom7': 'deep', 
     'Dmin7': 'light', 
     'Fmaj7': 'light',
@@ -3124,36 +3135,35 @@ export default function Home() {
   useEffect(() => {
     return () => {
       if (intervalRef.current !== null) {
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current as NodeJS.Timeout);
       }
     };
   }, []);
 
 
   const handlePlay = () => {
-    if (audioRef.current) {
-      audioRef.current.play();
-      setIsPlaying(true);
-      
+    
+    setIsPlaying(true);
+    
+    if (intervalRef.current !== null) {
       intervalRef.current = setInterval(() => {
 
-      if (audioSrc !== "merged.wav") {
-        // Find the stage with the elapsed time closest to the current time
-        for (let i = data[audioSrc].length - 1; i >= 0; i--) {
-          if (parseFloat(data[audioSrc][i][1]) < audioRef.current!.currentTime) {
-            setSleepStage(chord_to_sleep_map[data[audioSrc][i][0]] + ' / ' + data[audioSrc][i][0]);
-            break;
+        if (audioSrc !== "merged.wav") {
+          // Find the stage with the elapsed time closest to the current time
+          for (let i = data[audioSrc].length - 1; i >= 0; i--) {
+            if (parseFloat(data[audioSrc][i][1]) < audioRef.current!.currentTime) {
+              setSleepStage(chord_to_sleep_map[data[audioSrc][i][0]] + ' / ' + data[audioSrc][i][0]);
+              break;
+            }
           }
+        } else {
+          setSleepStage('No data available');
         }
-      }
-
-        //setSleepStage(chord_to_sleep_map[data[audioSrc][0][0]]);
-      }, 10); // Change 1000 to the desired interval in milliseconds
+      }, 10);
     }
   };
 
   const handlePause = () => {
-    audioRef.current.pause();
     setIsPlaying(false);
     setSleepStage('Paused...');
     clearInterval(intervalRef.current);
@@ -3511,62 +3521,65 @@ export default function Home() {
 
 
   return (
-    <main className="flex h-screen flex-col items-center justify-between pt-24 pb-24 pl-10 pr-10 bg-black text-white">
+    <main className="">
       
-      <h1 className="text-4xl text-center">
-        Sleep Data as Audio Waveforms
-      </h1>
-      <p className="text-center mb-7">
-        Representations of Personal Data Assignment for CS 8803 CDP (Spring &lsquo;24) @ GeorgiaTech
-      </p>
-      <div className='flex flex-col items-center mb-5 w-full'>
+      <div className='flex h-screen flex-col items-center justify-between pt-24 pb-24 pl-10 pr-10 bg-black text-white'>
+        <h1 className="text-4xl text-center">
+          Sleep Data as Audio Waveforms
+        </h1>
+        <p className="text-center mb-7">
+          Representations of Personal Data Assignment for CS 8803 CDP (Spring &lsquo;24) @ GeorgiaTech
+        </p>
+        <div className='flex flex-col items-center mb-5 w-full'>
 
-        <div className='grid landscape:grid-cols-5 landscape:grid-rows-3 portrait:grid-cols-2 portrait:grid-rows-5 landscape:gap-4 portrait:gap-2 mb-5 w-full max-h-[50vh]'>
-          <div className='landscape:row-span-2 landscape:col-span-3 portrait:row-span-3 portrait:col-span-2 '>
-            <div className='w-full h-full relative'>
-              <canvas ref={canvasRefMain} className='w-full h-full absolute'></canvas>
-              <div className='w-full absolute top-[45%] text-center'>{sleepStage}</div>
+          <div className='grid landscape:grid-cols-5 landscape:grid-rows-3 portrait:grid-cols-2 portrait:grid-rows-5 landscape:gap-4 portrait:gap-2 mb-5 w-full max-h-[50vh]'>
+            <div className='landscape:row-span-2 landscape:col-span-3 portrait:row-span-3 portrait:col-span-2 '>
+              <div className='w-full h-full relative'>
+                <canvas ref={canvasRefMain} className='w-full h-full absolute'></canvas>
+                <div className='w-full absolute top-[45%] text-center'>{sleepStage}</div>
+              </div>
             </div>
+            <div className='landscape:row-span-1 landscape:col-span-2 portrait:row-span-1 portrait:col-span-1 border'><canvas ref={canvasRefTop} className='w-full'></canvas></div>
+            <div className='landscape:row-span-1 landscape:col-span-2 portrait:row-span-1 portrait:col-span-1 border'><canvas ref={canvasRefBot} className='w-full'></canvas></div>
+            <div className='landscape:row-span-1 landscape:col-span-5 portrait:row-span-1 portrait:col-span-2 border'><canvas ref={canvasRefLine} className='w-full'></canvas></div>
           </div>
-          <div className='landscape:row-span-1 landscape:col-span-2 portrait:row-span-1 portrait:col-span-1 border'><canvas ref={canvasRefTop} className='w-full'></canvas></div>
-          <div className='landscape:row-span-1 landscape:col-span-2 portrait:row-span-1 portrait:col-span-1 border'><canvas ref={canvasRefBot} className='w-full'></canvas></div>
-          <div className='landscape:row-span-1 landscape:col-span-5 portrait:row-span-1 portrait:col-span-2 border'><canvas ref={canvasRefLine} className='w-full'></canvas></div>
-        </div>
-        
+          
 
-        <div className='w-full text-white flex'>
-          <select className="bg-black p-2 mt-2 mr-2 border" value={audioSrc} onChange={(src: React.ChangeEvent<HTMLSelectElement>) => handleAudioChange(src.target.value)} >
-            <option value="" disabled selected>Select a dataset</option>
-            <option value="merged.wav">All Days Merged</option>
-            <option value="02_20.wav">February 20, 2024</option>
-            <option value="02_21.wav">February 21, 2024</option>
-            <option value="02_22.wav">February 22, 2024</option>
-            <option value="02_23.wav">February 23, 2024</option>
-            <option value="02_24.wav">February 24, 2024</option>
-            <option value="02_25.wav">February 25, 2024</option>
-            <option value="02_26.wav">February 26, 2024</option>
-            <option value="02_27.wav">February 27, 2024</option>
-            <option value="02_28.wav">February 28, 2024</option>
-            <option value="02_29.wav">February 29, 2024</option>
-            <option value="03_01.wav">March 1, 2024</option>
-            <option value="03_02.wav">March 2, 2024</option>
-          </select>
-          <audio className="w-full" ref={audioRef} src={'./ropd/' + audioSrc} onPause={handlePause} onPlay={handlePlay} id="audio" controls crossOrigin="anonymous">
-            {/* <source  type="audio/wav" /> */}
-            Your browser does not support the audio element.
-          </audio>
-        </div>
+          <div className='w-full text-white flex'>
+            <select className="bg-black p-2 mt-2 mr-2 border" value={audioSrc} onChange={(src: React.ChangeEvent<HTMLSelectElement>) => handleAudioChange(src.target.value)} >
+              <option value="" disabled selected>Select a dataset</option>
+              <option value="merged.wav">All Days Merged</option>
+              <option value="02_20.wav">February 20, 2024</option>
+              <option value="02_21.wav">February 21, 2024</option>
+              <option value="02_22.wav">February 22, 2024</option>
+              <option value="02_23.wav">February 23, 2024</option>
+              <option value="02_24.wav">February 24, 2024</option>
+              <option value="02_25.wav">February 25, 2024</option>
+              <option value="02_26.wav">February 26, 2024</option>
+              <option value="02_27.wav">February 27, 2024</option>
+              <option value="02_28.wav">February 28, 2024</option>
+              <option value="02_29.wav">February 29, 2024</option>
+              <option value="03_01.wav">March 1, 2024</option>
+              <option value="03_02.wav">March 2, 2024</option>
+            </select>
+            <audio className="w-full" ref={audioRef} src={'./ropd/' + audioSrc} onPause={handlePause} onPlay={handlePlay} id="audio" controls crossOrigin="anonymous">
+              {/* <source  type="audio/wav" /> */}
+              Your browser does not support the audio element.
+            </audio>
+          </div>
 
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center mb-5">
-          <a href="#about" className="flex flex-col items-center justify-center">
-            <svg className="w-6 h-6 text-white animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-            </svg>
-            <p className="text-white font-mono">Scroll Down</p>
-          </a>
+          <div className="absolute bottom-0 left-0 right-0 flex justify-center mb-5">
+            <a href="#about" className="flex flex-col items-center justify-center">
+              <svg className="w-6 h-6 text-white animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+              </svg>
+              <p className="text-white font-mono">Scroll Down</p>
+            </a>
+          </div>
         </div>
       </div>
-      
+
+
     </main>
   );
 }
