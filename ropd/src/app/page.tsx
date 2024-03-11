@@ -3517,7 +3517,7 @@ export default function Home() {
         Sleep Data as Audio Waveforms
       </h1>
       <p className="text-center mb-7">
-        Representations of Personal Data Assignment for CS 8803 CDP (Spring '24) @ GeorgiaTech
+        Representations of Personal Data Assignment for CS 8803 CDP (Spring &lsquo;24) @ GeorgiaTech
       </p>
       <div className='flex flex-col items-center mb-5 w-full'>
 
