@@ -22,6 +22,14 @@ const nextConfig = {
           source: "/criticalcartography/:path*",
           destination: `${process.env.CRITICALCARTOGRAPHY_URL}/criticalcartography/:path*`,
         },
+        {
+          source: "/ropd",
+          destination: `${process.env.ROPD_URL}/ropd`,
+        },
+        {
+          source: "/ropd/:path*",
+          destination: `${process.env.ROPD_URL}/ropd/:path*`,
+        },
       ];
     },
 };
