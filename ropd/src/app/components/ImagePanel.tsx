@@ -7,7 +7,7 @@ interface ImagePanelProps {
 
 const ImagePanel = (props: ImagePanelProps) => {
   return (
-    <div className="w-full">
+    <div className="w-full b-botto">
       <div className="w-full flex flex-row justify-around">
         {props.sources.map((source, i) => (
           <div key={i} className={props.classes ? props.classes : ''}>

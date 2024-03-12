@@ -7,6 +7,8 @@ BAR = 4
 BPM = 960
 
 time_chord_map = {}
+time_chord_all = []
+
 
 # Format: {'mm_dd': [(chord, time_elapsed), ...], ...}
 for date in progression:
@@ -19,6 +21,11 @@ for date in progression:
         for chord, length in progression[date]:
             time_elapsed = beat_num / BPM * 60
             time_chord_map[new_date].append((chord, f'{time_elapsed:.2f}'))
+
+            time_all  = beat_num / BPM * 60
+            time_chord_all.append((chord, f'{time_all:.2f}'))
+
             beat_num += length * BAR
 
-print(json.dumps(time_chord_map))
+sorted_array = sorted(time_chord_all, key=lambda x: float(x[1]))
+print(json.dumps(sorted_array))

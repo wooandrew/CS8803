@@ -7,23 +7,24 @@ const Gallery = () => {
 
   return (
     <div className='flex flex-row justify-between w-full'>
-      <div className='grid grid-cols-2 gap-4 text-center overflow'>
+      <div className='grid landscape:grid-cols-2 portrait:grid-cols-1 gap-4 text-center overflow'>
         <TextPanel 
           heading='Step 1: Collect Data.' 
           text={[
-              'The first step of my process was of course to collect data. I knew from the get-go that I wanted to track my sleep, as I had been struggling to get good rest for the past few months. I decided I would track my sleep using a Samsung Galaxy Watch4. This was a strategic decision, as I did not know yet what kind of sleep  data I waned to  collect, and the watch has a variety of sensors that could be used to track different aspects of my sleep. As such, I decided to collect as many different categories of data while sleeping and decided at a later date which one I would eventually use.'
+              'The first step of my process was of course to collect data. I knew from the get-go that I wanted to track my sleep, as I had been struggling to get good rest for the past few months. I decided I would track my sleep using a Samsung Galaxy Watch4. This was a strategic decision, as I did not know yet what kind of sleep  data I wanted to  collect, and the watch has a variety of sensors that could be used to track different aspects of my sleep. As such, I decided to collect as many different categories of data while sleeping and decided at a later date which one I would eventually use.'
           ]}
+          border='border-t border-l'
         />
         <ImagePanel sources={['/ropd/watch.jpg', '/ropd/watchface.png']} caption='Figure 1. Samsung Galaxy Watch4' />
-        <ImagePanel sources={['/ropd/samsunghealthsleep.png']} caption='Figure 2. Screenshots of Samsung Health App' />
         <TextPanel
           heading=''
           text={[
             'The Samsung Galaxy Watch4 collects a variety of different data while sleeping. For example, it keeps track of the length of sleep, which sleep stage you are in at any given time, your blood oxygen levels, and even detects and tracks snoring. The Samsung Health App takes all of this data and arranges them in visual graphs for the user. These visualizations served as heavy inspiration for my project.',
-            'I collected data for about two weeks, and then decided to use the sleep stage data for my project.'
+            'I collected data for about two weeks, and then decided to use the sleep stage and blood oxygen data for my project.'
           ]}
-          right={true}
+          border='border-l' 
         />
+        <ImagePanel sources={['/ropd/samsunghealthsleep.png']} caption='Figure 2. Screenshots of Samsung Health App' />
         <TextPanel
           heading='Step 2: The Plan.'
           text={[
@@ -31,23 +32,25 @@ const Gallery = () => {
             'I wanted to make a visualization where the sleep stage graph is somehow wrapped around a clock so I could see how my sleep stages change over time. I also wanted to add a feature where I could see my average sleep stage graph.',
             "I quickly realized however that this was simply not an interesting visualization. It would just be a lazy rehash of Samsung's own visualization, just in a circular form. I decided I wanted to do something more interesting.",
           ]}
+          border='border-t border-r'
         />
         <ImagePanel sources={['/ropd/shealth_stages.png', '/ropd/inspoclocks.jpg']} classes='w-1/2' caption='Figure 3. Initial Inspiration' />
-        <ImagePanel sources={['/ropd/proto1.png', '/ropd/proto2.png', '/ropd/midi.png']} classes='w-1/2 bg-neutral-100 p-3' caption='Figure 4. Design Sketches + MIDI Programmer Inspiration' />
         <TextPanel
           heading=''
           text={[
             "While doing research for my own personal projects, I came across an image of a MIDI programming software, and thought Samsung's Sleep Stages Visualization resembled MIDI programming. This led me to the idea of creating a MIDI file from my sleep stages data, and then using that MIDI file to create a waveform visualization of my sleep stages. I could theoretically wrap the audio waveform around a circular clock to achieve something similar to my original idea, but slightly different.",
             "Eventually I decided to ditch the whole clock idea and just focus on the waveform visualization. I wanted to resulting audio to be somewhat listenable; at least, not horrible. So I decided I would use a familiar chord progression: I - VI - II - V in Cmaj7. I would map each sleep stage to a chord, and then program it into a MIDI file, which I could later EQ and add effects to.",
           ]}
-          right={true}
+          border='border-r' 
         />
+        <ImagePanel sources={['/ropd/proto1.png', '/ropd/proto2.png', '/ropd/midi.png']} classes='w-1/2 bg-neutral-100 p-3' caption='Figure 4. Design Sketches + MIDI Programmer Inspiration' />
         <TextPanel
           heading='Step 3: Data Processing.'
           text={[
             'The first step was to convert the sleep stages data into MIDI. In order to do this, I downloaded my sleep data off of the Samsung Health App. The sleep stages were recorded to a CSV file, along a bunch of other garbage data that I did not need. In order to properly process the data and remove any unnecessary parts, I wrote a Python script that took out the relevant data: start, stop, and stage. I organized each set of data by date.',
             'The script would also map each stage to a corresponding chord. I used the Cmaj7 chord progression (Awake: Cmaj7 -> REM: Amin7/Emin7 -> Light: Dmin7/Fmaj7 -> Deep: Gdom7), and the script would randomly add variance. to keep it less monotone.'
           ]}
+          border='border-t border-l'
         />
         <Code 
           code={`
@@ -122,32 +125,238 @@ with open(ss_file_path, 'r') as ss_file:
                 chord_progressions[date].append((chord_progression_alt_map[stage], int(length.total_seconds() / 60)))
 
     print(chord_progressions)`}
-ariaLabel='Parse Sleep Data'
-fileName='parse.py'
-language='python'
+          ariaLabel='Parse Sleep Data'
+          fileName='parse.py'
+          language='python'
         /> 
-          
 
-        <div>
-          <img src='/ropd/process_make_midi.png' className='w-full row-span-4 object-cover' />
-        </div>
-        <div className='w-full h-full flex items-center'>
-          <p className='m-auto'>Step 2. Map Sleep Stages to Chords, then output as MIDI</p>
-        </div>
-        <div className='w-full h-full flex items-center'>
-          <p className='m-auto'>Step 3. Add instrument to MIDI, add EQ and FX like reverb</p>
-        </div>
-        <div>
-          <img src='/ropd/process_eq_midi.png' className='w-full row-span-4 object-cover' />
-        </div>
-        <div>
-          <img src='/ropd/process_encode_timer.png' className='w-full row-span-4 object-cover' />
-        </div>
+        <TextPanel
+          heading='Data Processing, contd.: Convert Chords to MIDI.'
+          text={[
+            'Once the Sleep Stage to Chord Progression Mapping is created, I used the MIDIUtil library to create a separate MIDI file for each sleep session, which are segmented by date. I then used the Mingus library to convert the chords to notes and wrote them to their correct MIDI files.',
+            'Each Sleep Stage has data on how long it lasted. I used this data to approximate the number of minutes during each sleep stage. The number of minutes in a stage corresponds to the number of 4/4 bars in the MIDI file. For example, if a sleep stage lasted 12 minutes, it would be equivalent to 12 bars in the MIDI file. In order to shorten the audio length, I set the BPM to 960.',
+          ]}
+          border='border-l'
+        />
+        <Code
+          code={`
+from midiutil import MIDIFile
+from mingus.core import chords
+
+import random
+
+# chord_progression = ['Gdom7', 'Dmin7', 'Amin7', 'Cmaj7']
+# chord_variants = ['Gdom7', 'Fmaj7', 'Emin7', 'Cmaj7']
+
+class midif:
+    def __init__(self):
+
+        self.track = 0
+        self.channel = 0
+        self.time = 0        # In beats
+        self.duration = 1    # In beats
+        self.tempo = 960     # In BPM
+        self.volume = 100    # 0-127, as per the MIDI standard
+        self.BAR = 4         # 4 beats in a bar
+
+    def add_bar(self, num_bars=1):
+        self.time += self.BAR * num_bars
+
+    def add_beat(self, num_beats=1):
+        self.time += num_beats
+
+def swap_accidentals(note):
+    if note == 'Db':
+        return 'C#'
+    if note == 'D#':
+        return 'Eb'
+    if note == 'E#':
+        return 'F'
+    if note == 'Gb':
+        return 'F#'
+    if note == 'G#':
+        return 'Ab'
+    if note == 'A#':
+        return 'Bb'
+    if note == 'B#':
+        return 'C'
+
+    return note
+
+NOTES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
+OCTAVES = list(range(11))
+NOTES_IN_OCTAVE = len(NOTES)
+
+errors = {
+    'notes': 'Bad input, please refer this spec-\\n'
+}
+
+def cast_note(note: str, octave: int) -> int:
+    note = swap_accidentals(note)
+    assert note in NOTES, errors['notes']
+    assert octave in OCTAVES, errors['notes']
+
+    note = NOTES.index(note)
+    note += (NOTES_IN_OCTAVE * octave)
+
+    assert 0 <= note <= 127, errors['notes']
+
+    return note
+
+def cast_chord(chord: str, octave: int) -> list:
+    
+    noteCast = []
+    expandedChord = chords.from_shorthand(chord)
+    for note in expandedChord:
+        noteCast.append(cast_note(note, octave))
+
+    noteCast = sorted(noteCast)
+
+    return noteCast
+
+def add_full_chord(file: MIDIFile, _midif: midif, octave: int, chord: str, duration: int, sustain: int=1):
+
+    chordCast = cast_chord(chord, octave)
+
+    for note in chordCast:
+        file.addNote(_midif.track, _midif.channel, note, _midif.time, duration * sustain, _midif.volume)
+
+
+def add_arpeggio_chord(file: MIDIFile, _midif: midif, octave: int, chord: str, duration: int, down: bool=False, sustain: int=1):
+
+    castChord = cast_chord(chord, octave)
+    if down:
+        castChord.reverse()
+
+    for i, note in enumerate(castChord):
+        file.addNote(_midif.track, _midif.channel, note, _midif.time + i, (duration / len(castChord)) * sustain, _midif.volume)
+
+progression = ... snip ...
+
+... snip ...
+
+
+for day in progression:
+    
+    _midif = midif()
+    midi = MIDIFile(1)  # One track, defaults to format 1 (tempo track is created automatically)
+    midi.addTempo(_midif.track, _midif.time, _midif.tempo)
+
+    for chord, i in progression[day]:
         
-        <div className="w-full h-full flex items-center">
-          <p className='m-auto'>Step 4. Encode timings for waveforms</p>
-        </div>
-      
+        # Select full chord, arpeggio up, arpeggio down
+        choice = random.choice(['full', 'up', 'down'])
+
+        # Random Sustain
+        sustain = 1
+
+        print(f'Chord: {chord}, Duration: {i}, Choice: {choice}, Sustain: {sustain}')
+
+        ... snip ...
+
+        _midif.add_bar(i)
+
+    with open(f"{day}_output.mid", "wb") as output_file:
+        midi.writeFile(output_file)
+
+... snip ...
+
+with open("output.mid", "wb") as output_file:
+    midi.writeFile(output_file)`}
+
+          ariaLabel='Convert Chords to MIDI'
+          fileName='midi.py'
+          language='python'
+        /> 
+
+        <TextPanel
+          heading='Data Processing, contd.: Encoding Timings for Waveforms.'
+          text={[
+            'The final step to processing the data was to encode the timings for the waveforms. This was to ensure the visualization could display the sleep stage accurately at any given time during the audio playback.',
+            'Once again, I used Python to write a script that takes the thus-far processed sleep data, converts the Sleep Stage duration into bars, then converts bars into seconds. This data basically maps the chords corresponding to the sleep stages to the time when they first start playing in the audio file.',
+          ]}
+          border='border-l'
+        />
+        <Code
+          code={`
+import json
+
+progression = ... snip ...
+
+BEAT = 1
+BAR = 4
+BPM = 960
+
+time_chord_map = {}
+
+# Format: {'mm_dd': [(chord, time_elapsed), ...], ...}
+for date in progression:
+    
+        beat_num = 0
+        new_date = date.split('-')
+        new_date = f'{new_date[1]}_{new_date[2]}'
+        time_chord_map[new_date] = []
+    
+        for chord, length in progression[date]:
+            time_elapsed = beat_num / BPM * 60
+            time_chord_map[new_date].append((chord, f'{time_elapsed:.2f}'))
+            beat_num += length * BAR
+
+print(json.dumps(time_chord_map))`}
+          ariaLabel='Encode Timings for Waveforms'
+          fileName='encode_elapsed.py'
+          language='python'
+        />
+
+        <TextPanel
+          heading='Step 4: Equalizer & FX.'
+          text={[
+            'The next step was adding EQ and FX to the MIDI data. MIDI, which stands for Musical Instrument Digital Interface, is a digital protocol that allows electronic instruments, computers, and other devices to communicate with each other. It is not an audio file, but rather a set of instructions that tells a device what notes to play, when to play them, and how loud to play them. As such, I needed to add an instrument to the MIDI file, and then EQ and add effects like reverb.',
+            "In order to do this, I used REAPER, a digital audio workstation and MIDI sequencer software. I mapped grand piano audio as well as REAPER's ReaSynth plugin synthesizer to the MIDI data. I then added a ReaEQ to each track as well as the master in order to mellow out the synthesizer audio, making it less cacaphonic. I added just a touch of reverb to make the piano less jarring. I used blood oxygen data as a model for adding triangle and saw-tooth modulation.",
+            'Finally I rendered all of the MIDI files, now with audio mapped, equalized, and with effects, into individual WAV files. I also created a single WAV file that combined all of the individual tracks into one audio file.',
+          ]}
+          border='border-t border-r'
+        />
+        <ImagePanel sources={['/ropd/reaper.png']} caption='Figure 5. REAPER DAW, EQ, and FX' />
+
+       <TextPanel
+          heading='Step 5: Visualization.'
+          text={[
+            'The final step was to create the visualization. I used AudioMotion, an audio visualization library, to create the visualization on the fly as the audio plays. I went through several different iterations. Originally I wanted to create a circular visualization, but since I decided to avoid the clock idea, I initially abandoned this effort and opted for a simple, linear frequency visualization.'
+            
+          ]}
+          border='border-t border-l'
+        />
+        <ImagePanel sources={['/ropd/circularvis1.png', '/ropd/circularvis2.png', '/ropd/circularvis3.png', '/ropd/circularvis4.png',]} classes='bg-black' caption='Figure 6. Circular Visualization Prototypes' />
+        
+        <TextPanel
+          heading=''
+          text={[
+            'The idea behind the waveform visualization is directly tied to the audio, and therefore time. In essence, the linear visualization shows three axes of data: frequency range on the x-axis, gain (volume) on the y-axis, and time as the audio plays. This single visualization is enough to view every detail about the audio files I created using the sleep data. As shown in Figure 7, the audio visualization shows the sleep stages as they change over time (red), and the blood oxygen data can be seen by the saw-tooth pattern to the right of it.', 
+          ]}
+          border='border-l'
+        />
+        <ImagePanel sources={['/ropd/alpha1.png']} caption='Figure 7. Linear Visualization Prototype' />
+
+        <TextPanel
+          heading='Step 6: Final Product.'
+          text={[
+            'However, the single waveform felt a little lackluster, so I decided to revisit the circular visualization idea. I created a circular and mirrored version of the linear visualization instead, and added live captions using the sleep stage timing data to describe exactly what sleep stage I was in, along with the audio chord that was played.',
+          ]}
+          border='border-t border-r'
+        />
+        <ImagePanel sources={['/ropd/awake.png', '/ropd/rem.png', '/ropd/light.png', '/ropd/deep.png']} classes='bg-black' caption='Figure 8. Circular Visualizations w/ Live Captions' />
+
+        <TextPanel
+          heading=''
+          text={[
+            "I decided that just the linear visualization or just the circular visualization did not do much to show the data, so I decided display both of them, as well as two other similar visualizations. Besides the circular and linear banded visualizations, I added a line visualization that highlights the blood oxygen data, and a frequency resonance graph visualization that highlights the sleep stages.",
+            "Of course, the end product allows users to use the drop down menu to select the dataset they want to view, and the audio player to play the audio.",
+          ]}
+          border='border-r'
+        />
+        <ImagePanel sources={['/ropd/Final.png']} classes='bg-black' caption='Figure 9. Final Product' />
+
       </div>
 
     </div>

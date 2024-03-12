@@ -13,25 +13,17 @@ const Code = (props: CodeProps) => {
 
   const toggleExpanded = () => {
     setExpanded(!expanded);
-    if (!expanded) {
-      // Scroll to the bottom when expanding
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth",
-      });
-    } else {
-      // Scroll to the top when collapsing
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
   };
 
   return (
-    <div className="text-left text-xs font-mono">
-      <div className="code-info-bar">
-        {props.fileName} {/* Display the additional info */}
+    <div className="mt-2 text-left text-xs font-mono">
+      <div className="flex justify-between">
+        <div className="">
+          {props.fileName} - {props.language}
+        </div>
+        <button onClick={toggleExpanded}>
+          {expanded ? "Collapse" : "Expand"}
+        </button>
       </div>
       <div
         style={{
@@ -50,9 +42,6 @@ const Code = (props: CodeProps) => {
           aria-label={props.ariaLabel}
         />
       </div>
-      <button onClick={toggleExpanded}>
-        {expanded ? "Collapse" : "Expand"}
-      </button>
     </div>
   );
 };
