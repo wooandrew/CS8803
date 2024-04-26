@@ -2,6 +2,8 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import AudioMotionAnalyzer from 'audiomotion-analyzer'
+import WaveSurfer from 'wavesurfer.js'
+import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.esm.js'
 
 import Gallery from './components/Gallery';
 
@@ -17,6 +19,7 @@ export default function Home() {
   const canvasRefBot = useRef<HTMLCanvasElement>(null);
   const canvasRefLine = useRef<HTMLCanvasElement>(null);
   const intervalRef = useRef<NodeJS.Timeout>();
+  let wavesurferRef = useRef<WaveSurfer>();
 
   interface DataItem {
     [index: number]: string;
@@ -59,6 +62,8 @@ export default function Home() {
     if (intervalRef.current !== null) {
       intervalRef.current = setInterval(() => {
 
+        wavesurferRef.current!.seekTo(audioRef.current!.currentTime / audioRef.current!.duration);
+
         if (audioSrc) {
           // Find the stage with the elapsed time closest to the current time
           for (let i = data[audioSrc].length - 1; i >= 0; i--) {
@@ -72,12 +77,16 @@ export default function Home() {
         }
       }, 10);
     }
+
+    wavesurferRef.current!.play();
   };
 
   const handlePause = () => {
     setIsPlaying(false);
     setSleepStage('Paused...');
     clearInterval(intervalRef.current);
+
+    wavesurferRef.current!.pause();
   };
 
   const handleAudioChange = (src: string) => {
@@ -427,9 +436,33 @@ export default function Home() {
       }
     );
 
+    wavesurferRef.current?.destroy();
+
+    wavesurferRef.current = WaveSurfer.create({
+      container: '#waveform',
+      waveColor: 'rgb(200, 0, 200)',
+      progressColor: 'rgb(100, 0, 100)',
+      url: src
+    });
+
+    wavesurferRef.current.setMuted(true);
+
+    const wsRegions = wavesurferRef.current.registerPlugin(RegionsPlugin.create())
+
+    // Add region for each sleep stage
+    for (let i = 0; i < data[src].length; i++) {
+      wavesurferRef.current.on('decode', () => {
+        wsRegions.addRegion({
+          start: parseFloat(data[src][i][1]),
+          end: parseFloat(data[src][i+1][1]),
+          content: ' ',
+          drag: false,
+          resize: false,
+          color: chord_to_sleep_map[data[src][i][0]] === 'awake' ? 'rgba(255, 0, 0, 0.5)' : chord_to_sleep_map[data[src][i][0]] === 'light' ? 'rgba(0, 0, 255, 0.5)' : chord_to_sleep_map[data[src][i][0]] === 'deep' ? 'rgba(0, 255, 0, 0.5)' : 'rgba(255, 255, 0, 0.5)',
+        });
+      });
+    }
   };
-
-
 
   return (
     <main className=''>
@@ -443,7 +476,7 @@ export default function Home() {
         </p>
         <div className='flex flex-col items-center mb-5 w-full'>
 
-          <div className='grid landscape:grid-cols-5 landscape:grid-rows-3 portrait:grid-cols-2 portrait:grid-rows-5 landscape:gap-4 portrait:gap-2 mb-5 w-full max-h-[50vh]'>
+          <div className='grid landscape:grid-cols-5 landscape:grid-rows-5 portrait:grid-cols-2 portrait:grid-rows-7 landscape:gap-4 portrait:gap-2 mb-5 w-full max-h-[50vh]'>
             <div className='landscape:row-span-2 landscape:col-span-3 portrait:row-span-3 portrait:col-span-2 '>
               <div className='w-full h-full relative'>
                 <canvas ref={canvasRefMain} className='w-full h-full absolute'></canvas>
@@ -453,6 +486,7 @@ export default function Home() {
             <div className='landscape:row-span-1 landscape:col-span-2 portrait:row-span-1 portrait:col-span-1 border'><canvas ref={canvasRefTop} className='w-full'></canvas></div>
             <div className='landscape:row-span-1 landscape:col-span-2 portrait:row-span-1 portrait:col-span-1 border'><canvas ref={canvasRefBot} className='w-full'></canvas></div>
             <div className='landscape:row-span-1 landscape:col-span-5 portrait:row-span-1 portrait:col-span-2 border'><canvas ref={canvasRefLine} className='w-full'></canvas></div>
+            <div id='waveform' className='landscape:row-span-2 landscape:col-span-5 portrait:col-span-2 portrait:row-span-2'></div>
           </div>
           
 
@@ -473,7 +507,7 @@ export default function Home() {
               <option value='03_01.wav'>March 1, 2024</option>
               <option value='03_02.wav'>March 2, 2024</option>
             </select>
-            <audio className='w-full' ref={audioRef} src={'./ropd/' + audioSrc} onPause={handlePause} onPlay={handlePlay} id='audio' controls crossOrigin='anonymous'>
+            <audio className='w-full' ref={audioRef} src={'./ropd/' +  audioSrc} onPause={handlePause} onPlay={handlePlay} id='audio' controls crossOrigin='anonymous'>
               {/* <source  type='audio/wav' /> */}
               Your browser does not support the audio element.
             </audio>

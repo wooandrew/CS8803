@@ -20,7 +20,7 @@ const Gallery = () => {
           heading=''
           text={[
             'The Samsung Galaxy Watch4 collects a variety of different data while sleeping. For example, it keeps track of the length of sleep, which sleep stage you are in at any given time, your blood oxygen levels, and even detects and tracks snoring. The Samsung Health App takes all of this data and arranges them in visual graphs for the user. These visualizations served as heavy inspiration for my project.',
-            'I collected data for about two weeks, and then decided to use the sleep stage and blood oxygen data for my project.'
+            'I collected data for about two weeks, and then decided to combine sleep stage and blood oxygen data for my project.'
           ]}
           border='border-l' 
         />
@@ -29,7 +29,7 @@ const Gallery = () => {
           heading='Step 2: The Plan.'
           text={[
             'The plan (at least in the beginning) was to create a circular visualization around a clock. The Samsung Health app creates an interesting visualization with sleep stages: it is a sleep stage vs time graph, and because people move between the four different sleep stages multiple times a night, it creates a jagged graph.',
-            'I wanted to make a visualization where the sleep stage graph is somehow wrapped around a clock so I could see how my sleep stages change over time. I also wanted to add a feature where I could see my average sleep stage graph.',
+            'I wanted to make a visualization where the sleep stage and blood oxygen graphs are somehow wrapped around a clock so I could see how my sleep stages and blood oxygen levels change over time. I also wanted to add a feature where I could see my average sleep stage and blood oxygen graph across the data recording period.',
             "I quickly realized however that this was simply not an interesting visualization. It would just be a lazy rehash of Samsung's own visualization, just in a circular form. I decided I wanted to do something more interesting.",
           ]}
           border='border-t border-r'
@@ -38,8 +38,8 @@ const Gallery = () => {
         <TextPanel
           heading=''
           text={[
-            "While doing research for my own personal projects, I came across an image of a MIDI programming software, and thought Samsung's Sleep Stages Visualization resembled MIDI programming. This led me to the idea of creating a MIDI file from my sleep stages data, and then using that MIDI file to create a waveform visualization of my sleep stages. I could theoretically wrap the audio waveform around a circular clock to achieve something similar to my original idea, but slightly different.",
-            "Eventually I decided to ditch the whole clock idea and just focus on the waveform visualization. I wanted to resulting audio to be somewhat listenable; at least, not horrible. So I decided I would use a familiar chord progression: I - VI - II - V in Cmaj7. I would map each sleep stage to a chord, and then program it into a MIDI file, which I could later EQ and add effects to.",
+            "While doing research for my own personal projects, I came across an image of a MIDI programming software, and thought Samsung's Sleep Stages Visualization resembled MIDI programming. This led me to the idea of creating a MIDI file from my sleep stages data, and then using that MIDI file to create a waveform visualization of my sleep stages that has been EQ'ed with blood oxygen data. I could theoretically wrap the audio waveform around a circular clock to achieve something similar to my original idea, but slightly different.",
+            "Eventually I decided to ditch the whole clock idea and just focus on the waveform visualization. I wanted to resulting audio to be somewhat listenable; at least, not horrible. So I decided I would use a familiar chord progression: I - VI - II - V in Cmaj7. I would map each sleep stage to a chord, and then program it into a MIDI file, which I could later EQ with blood oxygen data and add effects to.",
           ]}
           border='border-r' 
         />
@@ -48,7 +48,7 @@ const Gallery = () => {
           heading='Step 3: Data Processing.'
           text={[
             'The first step was to convert the sleep stages data into MIDI. In order to do this, I downloaded my sleep data off of the Samsung Health App. The sleep stages were recorded to a CSV file, along a bunch of other garbage data that I did not need. In order to properly process the data and remove any unnecessary parts, I wrote a Python script that took out the relevant data: start, stop, and stage. I organized each set of data by date.',
-            'The script would also map each stage to a corresponding chord. I used the Cmaj7 chord progression (Awake: Cmaj7 -> REM: Amin7/Emin7 -> Light: Dmin7/Fmaj7 -> Deep: Gdom7), and the script would randomly add variance. to keep it less monotone.'
+            'The script would also map each stage to a corresponding chord. I used the Cmaj7 chord progression (Awake: Cmaj7 -> REM: Amin7/Emin7 -> Light: Dmin7/Fmaj7 -> Deep: Gdom7), and the script would randomly add variance to keep it less monotone.'
           ]}
           border='border-t border-l'
         />
@@ -312,7 +312,7 @@ print(json.dumps(time_chord_map))`}
           heading='Step 4: Equalizer & FX.'
           text={[
             'The next step was adding EQ and FX to the MIDI data. MIDI, which stands for Musical Instrument Digital Interface, is a digital protocol that allows electronic instruments, computers, and other devices to communicate with each other. It is not an audio file, but rather a set of instructions that tells a device what notes to play, when to play them, and how loud to play them. As such, I needed to add an instrument to the MIDI file, and then EQ and add effects like reverb.',
-            "In order to do this, I used REAPER, a digital audio workstation and MIDI sequencer software. I mapped grand piano audio as well as REAPER's ReaSynth plugin synthesizer to the MIDI data. I then added a ReaEQ to each track as well as the master in order to mellow out the synthesizer audio, making it less cacaphonic. I added just a touch of reverb to make the piano less jarring. I used blood oxygen data as a model for adding triangle and saw-tooth modulation.",
+            "In order to do this, I used REAPER, a digital audio workstation and MIDI sequencer software. I mapped grand piano audio as well as REAPER's ReaSynth plugin synthesizer to the MIDI data. I then added a ReaEQ to each track as well as the master in order to mellow out the synthesizer audio, making it less cacaphonic. I added just a touch of reverb to make the piano less jarring. I then used the blood oxygen data as a model for adding triangle and saw-tooth modulation. Because I could not get the blood oxygen data from Samsung, I had to use the graphs provided in the app and copy the EQ waves by hand.",
             'Finally I rendered all of the MIDI files, now with audio mapped, equalized, and with effects, into individual WAV files. I also created a single WAV file that combined all of the individual tracks into one audio file.',
           ]}
           border='border-t border-r'
@@ -356,6 +356,22 @@ print(json.dumps(time_chord_map))`}
           border='border-r'
         />
         <ImagePanel sources={['/ropd/Final.png']} classes='bg-black' caption='Figure 9. Final Product' />
+
+        <TextPanel
+          heading='Subversion of Visualization Best Practices'
+          text={[
+            'The final product, in retrospect, is not a good visualization in terms of what is generally accepted as visualizations. The word visualization, and particularly data visualization, implies that the data is being soley consumed by the eyes. This project aims to subvert these expectations by introducing audio to the visualization.',
+          ]}
+          border='border-l border-t border-b'
+        />
+        <TextPanel
+          heading='Cont.'
+          text={[
+            'Within the Data Feminism framework, this subversion of expectations and best practices is a form of challenging power. The field of data visualization often prioritizes the visual over the auditory, leaving the visually impaired with very little to work with. This project aims to challenge that status quo by serving the data through audio.',
+          ]}
+          border='border-r border-t border-b'
+        />
+
 
       </div>
 
