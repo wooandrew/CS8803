@@ -442,7 +442,7 @@ export default function Home() {
       container: '#waveform',
       waveColor: 'rgb(200, 0, 200)',
       progressColor: 'rgb(100, 0, 100)',
-      url: src
+      url: './ropd/' + src,
     });
 
     wavesurferRef.current.setMuted(true);

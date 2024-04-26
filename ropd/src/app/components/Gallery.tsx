@@ -351,7 +351,7 @@ print(json.dumps(time_chord_map))`}
           heading=''
           text={[
             "I deemed that just the linear visualization or just the circular visualization did not do much to show the data, so I decided to display both of them, as well as two other similar visualizations. Besides the circular and linear banded visualizations, I added a line visualization that highlights the blood oxygen data, and a frequency resonance graph visualization that highlights the sleep stages.",
-            "Of course, the end product allows users to use the drop down menu to select the dataset they want to view, and the audio player to play the audio.",
+            "Finally, I added an overall graph that shows all of the sleep stages in order to give viewers an overall picture of that sleep session.",
           ]}
           border='border-r'
         />
